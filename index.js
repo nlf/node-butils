@@ -1,5 +1,6 @@
-exports.readString = function (buf, start, end) {
-    var pos = start,
+exports.readString = function (buf, _start, _end) {
+    var pos = _start || 0,
+        end = _end || buf.length,
         res = '',
         byte,
         byte2;
