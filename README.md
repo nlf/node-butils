@@ -14,6 +14,8 @@ Functions included
 * readVarint(buffer, offset) -- (no equivalent)
 * writeVarint(buffer, int, offset) -- (no equivalent)
 
+Note that the Int32 functions are currently unsigned and big endian only, though I'd happily accept pull requests to add more functionality.
+
 Benchmark
 =========
 
