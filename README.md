@@ -21,22 +21,22 @@ Benchmark
 
 * Buffer#writeInt8: 15230ms
 * butils#writeInt: 165ms
-*
+* 
 * Buffer#readInt8: 3074ms
 * butils#readInt: 162ms
-*
+* 
 * Buffer#writeUInt32BE: 9873ms
 * butils#writeInt32: 258ms
 * 
 * Buffer#readUInt32BE: 4405ms
 * butils#readInt32: 322ms
-*
+* 
 * Buffer#write: 46346ms
 * butils#writeString: 2414ms
-*
+* 
 * Buffer#toString: 17275ms
 * butils#readString: 7516ms
-*
+* 
 * butils#writeVarint: 1273ms
-*
+* 
 * butils#readVarint: 4426ms
