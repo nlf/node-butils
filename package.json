@@ -1,6 +1,6 @@
 {
   "name": "butils",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "helper functions to make buffers faster",
   "main": "index.js",
   "repository": {

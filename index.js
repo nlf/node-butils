@@ -1,5 +1,6 @@
 exports.readString = function (buf, start, end) {
-    var pos = start,
+    var pos = start || 0,
+        end = end || buf.length,
         res = '',
         byte,
         byte2;
@@ -57,10 +58,10 @@ exports.readVarint = function (buf, offset) {
         pos = offset || 0;
     do {
         byte = buf[pos];
-        res += (byte & 0x7F) << (7 * pos);
+        res += (byte & 0x7F) << (7 * (pos - offset));
         pos++;
     } while (byte >= 0x80);
-    return { num: res, bytes: pos };
+    return { num: res, bytes: (pos - offset) };
 };
 
 exports.writeVarint = function (buf, num, offset) {
