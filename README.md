@@ -21,24 +21,24 @@ Benchmark
 
 100,000,000 iterations of each function. (see bench.js)
 
-* Buffer#writeInt8: 15230ms
-* butils#writeInt: 165ms
+* Buffer#writeInt8: 1225ms
+* butils#writeInt: 166ms
 * 
-* Buffer#readInt8: 3074ms
-* butils#readInt: 162ms
+* Buffer#readInt8: 761ms
+* butils#readInt: 164ms
 * 
-* Buffer#writeUInt32BE: 9873ms
-* butils#writeInt32: 258ms
+* Buffer#writeUInt32BE: 1544ms
+* butils#writeInt32: 257ms
 * 
-* Buffer#readUInt32BE: 4405ms
-* butils#readInt32: 322ms
+* Buffer#readUInt32BE: 1525ms
+* butils#readInt32: 323ms
 * 
-* Buffer#write: 46346ms
-* butils#writeString: 2414ms
+* Buffer#write: 45101ms
+* butils#writeString: 2509ms
 * 
-* Buffer#toString: 17275ms
-* butils#readString: 7516ms
+* Buffer#toString: 17505ms
+* butils#readString: 7340ms
 * 
-* butils#writeVarint: 1273ms
+* butils#writeVarint: 1264ms
 * 
-* butils#readVarint: 4426ms
+* butils#readVarint: 4777ms

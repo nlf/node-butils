@@ -5,7 +5,7 @@ var butils = require('./index'),
 console.log('\n');
 console.time('Buffer#writeInt8');
 for (var i = 0; i < 100000000; i++) {
-    buf.writeInt8(100, 0);
+    buf.writeInt8(100, 0, true);
 }
 console.timeEnd('Buffer#writeInt8');
 
@@ -19,7 +19,7 @@ console.log('\n');
 
 console.time('Buffer#readInt8');
 for (var i = 0; i < 100000000; i++) {
-    val = buf.readInt8(0);
+    val = buf.readInt8(0, true);
 }
 console.timeEnd('Buffer#readInt8');
 
@@ -32,7 +32,7 @@ console.timeEnd('butils#readInt');
 console.log('\n');
 console.time('Buffer#writeUInt32BE');
 for (var i = 0; i < 100000000; i++) {
-    buf.writeUInt32BE(654321, 0);
+    buf.writeUInt32BE(654321, 0, true);
 }
 console.timeEnd('Buffer#writeUInt32BE');
 
@@ -45,7 +45,7 @@ console.timeEnd('butils#writeInt32');
 console.log('\n');
 console.time('Buffer#readUInt32BE');
 for (var i = 0; i < 100000000; i++) {
-    val = buf.readUInt32BE(0);
+    val = buf.readUInt32BE(0, true);
 }
 console.timeEnd('Buffer#readUInt32BE');
 
