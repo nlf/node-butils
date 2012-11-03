@@ -1,10 +1,10 @@
 exports.readString = function (buf, start, end) {
     var pos = start || 0,
-        end = end || buf.length,
+        last = end || buf.length,
         res = '',
         byte,
         byte2;
-    while (pos < end) {
+    while (pos < last) {
         byte = buf[pos];
         if (byte > 191 && byte < 224) {
             pos++;
@@ -72,4 +72,15 @@ exports.writeVarint = function (buf, num, offset) {
         pos++;
     }
     buf[pos] = num;
+};
+
+exports.toArray = function (buf, start, end) {
+    var pos = start || 0,
+        last = end || buf.length,
+        ret = [];
+    while (pos < last) {
+        ret.push(buf[pos]);
+        pos++;
+    }
+    return ret;
 };

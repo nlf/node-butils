@@ -1,6 +1,6 @@
 {
   "name": "butils",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "helper functions to make buffers faster",
   "main": "index.js",
   "repository": {
@@ -12,5 +12,8 @@
     "ctype"
   ],
   "author": "Nathan LaFreniere <quitlahok@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "audit": "0.0.6"
+  }
 }
