@@ -10,9 +10,8 @@ exports.readString = function (buf, start, end) {
             pos++;
             byte = ((byte & 0x1F) << 6) | (buf[pos] & 0x3F);
         } else if ((byte > 128 && byte < 191) || byte > 224) {
-            pos++;
-            byte2 = buf[pos];
-            pos++;
+            byte2 = buf[pos + 1];
+            pos += 2;
             byte = ((byte & 0x0F) << 12) | ((byte2 & 0x3F) << 6) | (buf[pos] & 0x3F);
         }
         res += String.fromCharCode(byte);
