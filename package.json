@@ -14,6 +14,7 @@
   "author": "Nathan LaFreniere <quitlahok@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "audit": "0.0.6"
+    "audit": "0.0.6",
+    "precommit-hook": ""
   }
 }
