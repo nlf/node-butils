@@ -1,11 +1,11 @@
 {
   "name": "butils",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "helper functions to make buffers faster",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/nathan-lafreniere/node-butils.git"
+    "url": "git://github.com/nlf/node-butils.git"
   },
   "keywords": [
     "buffer",
