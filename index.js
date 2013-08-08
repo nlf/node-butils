@@ -51,7 +51,7 @@ exports.writeInt32 = function (buf, int, offset) {
     buf[offset + 3] = int;
 };
 
-exports.readVarint = function (buf, offset) {
+exports.readVarint = function (buf, offset, zigzag) {
     var byte,
         res = 0,
         pos = offset || 0;
@@ -60,11 +60,13 @@ exports.readVarint = function (buf, offset) {
         res += (byte & 0x7F) << (7 * (pos - offset));
         pos++;
     } while (byte >= 0x80);
+    if (zigzag) num = (num >>> 1) ^ -(num & 1);
     return { num: res, bytes: (pos - offset) };
 };
 
-exports.writeVarint = function (buf, num, offset) {
+exports.writeVarint = function (buf, num, offset, zigzag) {
     var pos = offset || 0;
+    if (zigzag) num = (num << 1) ^ (num >> 63);
     while (num >= 0x80) {
         buf[pos] = num | 0x80;
         num = num >> 7;
