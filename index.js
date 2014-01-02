@@ -43,6 +43,11 @@ exports.readInt32 = function (buf, offset) {
     return (buf[offset] << 24 >>> 0) + ((buf[offset + 1] << 16) | (buf[offset + 2] << 8) | (buf[offset + 3]));
 };
 
+exports.readInt32LE = function (buf, offset) {
+    offset = offset || 0;
+    return (buf[offset + 3] << 24 >>> 0) + ((buf[offset + 2] << 16) | (buf[offset + 1] << 8) | (buf[offset]));
+};
+
 exports.writeInt32 = function (buf, int, offset) {
     offset = offset || 0;
     buf[offset] = int >> 24;
