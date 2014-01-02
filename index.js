@@ -65,7 +65,7 @@ exports.readVarint = function (buf, offset, zigzag) {
         res += (byte & 0x7F) << (7 * (pos - offset));
         pos++;
     } while (byte >= 0x80);
-    if (zigzag) num = (num >>> 1) ^ -(num & 1);
+    if (zigzag) res = (res >>> 1) ^ -(res & 1);
     return { num: res, bytes: (pos - offset) };
 };
 
