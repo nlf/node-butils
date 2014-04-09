@@ -65,7 +65,6 @@ exports.leftShift = function (buf, offset) {
     var byteOffset = offset % 8;
     var bufferOffset = (offset - byteOffset) / 8;
     var newbuf = new Buffer(buf.length);
-    //       iter,  | length = buffer length minus number of bytes total shifted plus one if we need to grab bits form one more byte
     for (var i = 0, ln = buf.length - (bufferOffset + byteOffset > 0 ? 1 : 0); i < ln; i++) {
         newbuf[i] = ((buf[i + bufferOffset] << byteOffset) & (buf[i + bufferOffset + 1] >>> (8 - byteOffset)));
     }
