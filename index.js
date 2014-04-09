@@ -1,15 +1,15 @@
-exports._bits =         [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80];
-exports._bitsInverse =  [0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F];
+exports._bits =         [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80].reverse();
+exports._bitsInverse =  [0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F].reverse();
 
 exports.getBit = function (buf, postion) {
-    var bitInByte = (postion % 8) - 1;
+    var bitInByte = (postion - 1) % 8;
     var byteInBuf = Math.floor(postion / 8);
-    return (buf[byteInBuf] | exports._bitsInverse[bitInByte]) === 0xFF ? true : false
+    return (buf[byteInBuf] | exports._bitsInverse[bitInByte]) === 0xFF ? true : false;
 };
 
 exports.setBit = function (buf, postion, value) {
-    var bitInByte = (postion % 8) - 1;
-    var byteInBuf = Math.floor(postion / 8);
+    var bitInByte = (postion - 1) % 8;
+    var byteInBuf = Math.floor(postion / 8 - 0.001);
     if (value) {
         buf[byteInBuf] = buf[byteInBuf] | exports._bits[bitInByte];
     } else {
