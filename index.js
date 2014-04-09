@@ -1,3 +1,88 @@
+exports._bits =         [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80];
+exports._bitsInverse =  [0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F];
+
+exports.getBit = function (buf, postion) {
+    var bitInByte = (postion % 8) - 1;
+    var byteInBuf = Math.floor(postion / 8);
+    return (buf[byteInBuf] | exports._bitsInverse[bitInByte]) === 0xFF ? true : false
+};
+
+exports.setBit = function (buf, postion, value) {
+    var bitInByte = (postion % 8) - 1;
+    var byteInBuf = Math.floor(postion / 8);
+    if (value) {
+        buf[byteInBuf] = buf[byteInBuf] | exports._bits[bitInByte];
+    } else {
+        buf[byteInBuf] = buf[byteInBuf] ^ exports._bits[bitInByte];
+    }
+    return buf[byteInBuf];
+};
+
+exports.XOR = function (buf1, buf2) {
+    for (var i = 0, ln = buf2.length; i < ln; i++) {
+        buf1[i] = buf1[i] ^ buf2[i];
+    }
+    return buf1;
+};
+
+exports.AND = function (buf1, buf2) {
+    for (var i = 0, ln = buf2.length; i < ln; i++) {
+        buf1[i] = buf1[i] & buf2[i];
+    }
+    return buf1;
+};
+
+exports.OR = function (buf1, buf2) {
+    for (var i = 0, ln = buf2.length; i < ln; i++) {
+        buf1[i] = buf1[i] | buf2[i];
+    }
+    return buf1;
+};
+
+exports.NOT = function (buf) {
+    for (var i = 0, ln = buf.length; i < ln; i++) {
+        buf[i] = ~ buf[i];
+    }
+    return buf;
+};
+
+exports.EQUAL = function (buf1, buf2) {
+    if (buf1.length !== buf2.length) return false;
+    var equal = true;
+    var length = buf1.length;
+    var index = 0;
+    while (equal && index < length) {
+        if (buf1[index] === buf2[index]) {
+            index++;
+        } else {
+            equal = false;
+        }
+    }
+    return equal;
+};
+
+exports.leftShift = function (buf, offset) {
+    var byteOffset = offset % 8;
+    var bufferOffset = (offset - byteOffset) / 8;
+    var newbuf = new Buffer(buf.length);
+    //       iter,  | length = buffer length minus number of bytes total shifted plus one if we need to grab bits form one more byte
+    for (var i = 0, ln = buf.length - (bufferOffset + byteOffset > 0 ? 1 : 0); i < ln; i++) {
+        newbuf[i] = ((buf[i + bufferOffset] << byteOffset) & (buf[i + bufferOffset + 1] >>> (8 - byteOffset)));
+    }
+    return newbuf;
+};
+
+exports.rightShift = function (buf, offset) {
+    var byteOffset = offset % 8;
+    var bufferOffset = (offset - byteOffset) / 8;
+    var newbuf = new Buffer(buf.length);
+
+    for (var i = buf.length - 1, ln = (bufferOffset + byteOffset > 0 ? 1 : 0); i > ln; i--) {
+        newbuf[i] = ((buf[i - bufferOffset - 1] << byteOffset) & (buf[i - bufferOffset] >>> (8 - byteOffset)));
+    }
+    return newbuf;
+};
+
 exports.readString = function (buf, start, end) {
     var pos = start || 0,
         last = end || buf.length,
