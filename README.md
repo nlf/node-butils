@@ -1,5 +1,17 @@
 butils
 ------
+###Bufferwise binary operations
+ - getBit(buffer, offset) returns true or false
+ - setBit(buffer, offset, boolean) returns the changed byte
+ - XOR(buffer, buffer2) returns the modifed first buffer
+ - OR(buffer, buffer2) returns the modifed first buffer
+ - AND(buffer, buffer2) return the modifed first buffer
+ - NOT(buffer) return the modifed buffer
+ - EQUAL(buffer, buffer2) returns a boolean
+ - leftShift(buffer, offset) returns a NEW buffer
+ - rightShift(buffer, offset) returns a NEW buffer
+ - signedRightShift(buffer, offset) returns a NEW buffer
+
 
 These are some helper functions that appear to be significantly faster than core Buffer manipulation functions.
 
