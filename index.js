@@ -78,7 +78,6 @@ exports.leftShift = function (buf, offset) {
 };
 
 exports.rightShift = function (buf, offset) {
-    console.log('derp');
     if (buf.length === 1) return new Buffer([buf[0] >>> offset]);
     var byteOffset = offset % 8;
     var bufferOffset = (offset - byteOffset) / 8;
@@ -93,6 +92,7 @@ exports.rightShift = function (buf, offset) {
     if (bufferOffset > 0) for (i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0x00; }
     return newbuf;
 };
+
 exports.signedRightShift = function (buf, offset) {
     if (buf.length === 1) return new Buffer([((((0xff00 * (buf[0] >>7)) | buf[0]) >> offset) & 0xff)]);
     if (!exports.getBit(buf, 1)) return exports.rightShift(buf, offset);
