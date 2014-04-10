@@ -190,8 +190,48 @@ describe('butils', function () {
         });
     });
     describe('#leftShift', function () {
+        it('can shift a single byte buffer', function (done) {
+            var buf = new Buffer([0x0F]);
+            var newbuf = butils.leftShift(buf, 4);
+            
+            expect(butils.EQUAL(newbuf, new Buffer([0xF0]))).to.equal(true);
+            done();
+        });
+        it('can shift a multi byte buffer by less than a byte', function (done) {
+            var buf = new Buffer([0xF0, 0xFF]);
+            var newbuf = butils.leftShift(buf, 4);
+            
+            expect(butils.EQUAL(newbuf, new Buffer([0x0F, 0xF0]))).to.equal(true);
+            done();
+        });
+        it('can shift a multi byte buffer by a byte', function (done) {
+            var buf = new Buffer([0xFA, 0xFF, 0xAA, 0xFF]);
+            var newbuf = butils.leftShift(buf, 8);
+            
+            expect(butils.EQUAL(newbuf, new Buffer([0xFF, 0xAA, 0xFF, 0x00]))).to.equal(true);
+            done();
+        });
+        if('can shift a multi byte buffer by more than a byte', function (done) {
+            var buf = new Buffer([0xFA, 0xBB, 0xCC, 0xDD, 0xEE]);
+            var newbuf = butils.leftShift(buf, 12);
+            
+            expect(butils.EQUAL(newbuf, new Buffer([0xBC, 0xCD, 0xDE, 0xE0, 0x00]))).to.equal(true);
+            done();
+        });
     });
     describe('#rightShift', function () {
+        it('can shift a single byte buffer', function (done) {
+            done();
+        });
+        it('can shift a multi byte buffer by less than a byte', function (done) {
+            done();
+        });
+        it('can shift a multi byte buffer by a byte', function (done) {
+            done();
+        });
+        if('can shift a multi byte buffer by more than a byte', function (done) {
+            done();
+        });
     });
     describe('#read/writeString', function () {
         it('can write a string', function (done) {

@@ -62,12 +62,17 @@ exports.EQUAL = function (buf1, buf2) {
 };
 
 exports.leftShift = function (buf, offset) {
+    if (buf.length === 1) return new Buffer([buf[0] << offset]);
     var byteOffset = offset % 8;
     var bufferOffset = (offset - byteOffset) / 8;
     var newbuf = new Buffer(buf.length);
+    var lastByteChange = 0;
     for (var i = 0, ln = buf.length - (bufferOffset + byteOffset > 0 ? 1 : 0); i < ln; i++) {
-        newbuf[i] = ((buf[i + bufferOffset] << byteOffset) & (buf[i + bufferOffset + 1] >>> (8 - byteOffset)));
+        newbuf[i] = ((buf[i + bufferOffset] << byteOffset) | (buf[i + bufferOffset + 1] >>> (8 - byteOffset)));
+        lastByteChange = i;
     }
+    if (byteOffset === 0) byteOffset = 8;
+    newbuf[lastByteChange + 1] = buf[lastByteChange + 1] >>> byteOffset << byteOffset;
     return newbuf;
 };
 
