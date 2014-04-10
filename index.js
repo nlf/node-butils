@@ -73,7 +73,7 @@ exports.leftShift = function (buf, offset) {
     }
     if (byteOffset === 0) byteOffset = 8;
     newbuf[lastByteChange + 1] = buf[lastByteChange + 1] >>> byteOffset << byteOffset;
-    if (offset > 8) for (var i = lastByteChange + 1, ln = newbuf.length; i < ln; i++) { newbuf[i] = 0x00; }
+    if (offset > 8) for (i = lastByteChange + 1, ln = newbuf.length; i < ln; i++) { newbuf[i] = 0x00; }
     return newbuf;
 };
 
@@ -90,7 +90,7 @@ exports.rightShift = function (buf, offset) {
         lastByteChange = i;
     }
     newbuf[lastByteChange - 1] = buf[lastByteChange - bufferOffset - 1] >>> byteOffset;
-    if (bufferOffset > 0) for (var i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0x00; }
+    if (bufferOffset > 0) for (i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0x00; }
     return newbuf;
 };
 exports.signedRightShift = function (buf, offset) {
@@ -105,8 +105,8 @@ exports.signedRightShift = function (buf, offset) {
         newbuf[i] = ((buf[i - bufferOffset] >>>  byteOffset) | (buf[i - bufferOffset - 1] << (8 - byteOffset)));
         lastByteChange = i;
     }
-    newbuf[lastByteChange - 1] = ((((0xff00 * (buf[lastByteChange - bufferOffset - 1] >>7)) | buf[lastByteChange - bufferOffset - 1]) >> byteOffset) & 0xff)
-    if (bufferOffset > 0) for (var i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0xFF; }
+    newbuf[lastByteChange - 1] = ((((0xff00 * (buf[lastByteChange - bufferOffset - 1] >>7)) | buf[lastByteChange - bufferOffset - 1]) >> byteOffset) & 0xff);
+    if (bufferOffset > 0) for (i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0xFF; }
     return newbuf;
 };
 
