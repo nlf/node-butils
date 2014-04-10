@@ -67,7 +67,7 @@ exports.leftShift = function (buf, offset) {
     var bufferOffset = (offset - byteOffset) / 8;
     var newbuf = new Buffer(buf.length);
     var lastByteChange = 0;
-    for (var i = 0, ln = buf.length - (bufferOffset + byteOffset > 0 ? 1 : 0); i < ln; i++) {
+    for (var i = 0, ln = buf.length - bufferOffset + 1; i < ln; i++) {
         newbuf[i] = ((buf[i + bufferOffset] << byteOffset) | (buf[i + bufferOffset + 1] >>> (8 - byteOffset)));
         lastByteChange = i;
     }
@@ -78,13 +78,35 @@ exports.leftShift = function (buf, offset) {
 };
 
 exports.rightShift = function (buf, offset) {
+    console.log('derp');
+    if (buf.length === 1) return new Buffer([buf[0] >>> offset]);
     var byteOffset = offset % 8;
     var bufferOffset = (offset - byteOffset) / 8;
     var newbuf = new Buffer(buf.length);
+    var lastByteChange = buf.length;
 
-    for (var i = buf.length - 1, ln = (bufferOffset + byteOffset > 0 ? 1 : 0); i > ln; i--) {
-        newbuf[i] = ((buf[i - bufferOffset - 1] << byteOffset) & (buf[i - bufferOffset] >>> (8 - byteOffset)));
+    for (var i = buf.length - 1, ln = bufferOffset; i > ln; i--) {
+        newbuf[i] = ((buf[i - bufferOffset] >>>  byteOffset) | (buf[i - bufferOffset - 1] << (8 - byteOffset)));
+        lastByteChange = i;
     }
+    newbuf[lastByteChange - 1] = buf[lastByteChange - bufferOffset - 1] >>> byteOffset;
+    if (bufferOffset > 0) for (var i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0x00; }
+    return newbuf;
+};
+exports.signedRightShift = function (buf, offset) {
+    if (buf.length === 1) return new Buffer([((((0xff00 * (buf[0] >>7)) | buf[0]) >> offset) & 0xff)]);
+    if (!exports.getBit(buf, 1)) return exports.rightShift(buf, offset);
+    var byteOffset = offset % 8;
+    var bufferOffset = (offset - byteOffset) / 8;
+    var newbuf = new Buffer(buf.length);
+    var lastByteChange = buf.length;
+
+    for (var i = buf.length - 1, ln = bufferOffset; i > ln; i--) {
+        newbuf[i] = ((buf[i - bufferOffset] >>>  byteOffset) | (buf[i - bufferOffset - 1] << (8 - byteOffset)));
+        lastByteChange = i;
+    }
+    newbuf[lastByteChange - 1] = ((((0xff00 * (buf[lastByteChange - bufferOffset - 1] >>7)) | buf[lastByteChange - bufferOffset - 1]) >> byteOffset) & 0xff)
+    if (bufferOffset > 0) for (var i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0xFF; }
     return newbuf;
 };
 
