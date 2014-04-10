@@ -211,25 +211,48 @@ describe('butils', function () {
             expect(butils.EQUAL(newbuf, new Buffer([0xFF, 0xAA, 0xFF, 0x00]))).to.equal(true);
             done();
         });
-        if('can shift a multi byte buffer by more than a byte', function (done) {
+        it('can shift a multi byte buffer by more than a byte', function (done) {
             var buf = new Buffer([0xFA, 0xBB, 0xCC, 0xDD, 0xEE]);
             var newbuf = butils.leftShift(buf, 12);
             
             expect(butils.EQUAL(newbuf, new Buffer([0xBC, 0xCD, 0xDE, 0xE0, 0x00]))).to.equal(true);
             done();
         });
+        it('can shift a multi byte buffer by more than 2 bytes', function (done) {
+            var buf = new Buffer([0x66, 0x77, 0x88, 0x99, 0xAA, 0xBB, 0xCC, 0xDD, 0xEE, 0xFF]);
+            var newbuf = butils.leftShift(buf, 20);
+            
+            expect(butils.EQUAL(newbuf, new Buffer([0x89, 0x9A, 0xAB, 0xBC, 0xCD, 0xDE, 0xEF, 0xF0, 0x00, 0x00]))).to.equal(true);
+            done();
+        });
     });
     describe('#rightShift', function () {
         it('can shift a single byte buffer', function (done) {
+            //var buf = new Buffer([0x0F]);
+            //var newbuf = butils.leftShift(buf, 4);
+            
+            //expect(butils.EQUAL(newbuf, new Buffer([0xF0]))).to.equal(true);
             done();
         });
         it('can shift a multi byte buffer by less than a byte', function (done) {
+            //var buf = new Buffer([0xF0, 0xFF]);
+            //var newbuf = butils.leftShift(buf, 4);
+            
+            //expect(butils.EQUAL(newbuf, new Buffer([0x0F, 0xF0]))).to.equal(true);
             done();
         });
         it('can shift a multi byte buffer by a byte', function (done) {
+            //var buf = new Buffer([0xFA, 0xFF, 0xAA, 0xFF]);
+            //var newbuf = butils.leftShift(buf, 8);
+            
+            //expect(butils.EQUAL(newbuf, new Buffer([0xFF, 0xAA, 0xFF, 0x00]))).to.equal(true);
             done();
         });
-        if('can shift a multi byte buffer by more than a byte', function (done) {
+        it('can shift a multi byte buffer by more than a byte', function (done) {
+            //var buf = new Buffer([0xFA, 0xBB, 0xCC, 0xDD, 0xEE]);
+            //var newbuf = butils.leftShift(buf, 12);
+            
+            //expect(butils.EQUAL(newbuf, new Buffer([0xBC, 0xCD, 0xDE, 0xE0, 0x00]))).to.equal(true);
             done();
         });
     });

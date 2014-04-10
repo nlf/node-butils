@@ -73,6 +73,7 @@ exports.leftShift = function (buf, offset) {
     }
     if (byteOffset === 0) byteOffset = 8;
     newbuf[lastByteChange + 1] = buf[lastByteChange + 1] >>> byteOffset << byteOffset;
+    if (offset > 8) for (var i = lastByteChange + 1, ln = newbuf.length; i < ln; i++) { newbuf[i] = 0x00; }
     return newbuf;
 };
 
