@@ -1,3 +1,115 @@
+exports._bits =         [0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80].reverse();
+exports._bitsInverse =  [0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F].reverse();
+
+exports.getBit = function (buf, postion) {
+    var bitInByte = (postion - 1) % 8;
+    var byteInBuf = Math.floor(postion / 8);
+    return (buf[byteInBuf] | exports._bitsInverse[bitInByte]) === 0xFF ? true : false;
+};
+
+exports.setBit = function (buf, postion, value) {
+    var bitInByte = (postion - 1) % 8;
+    var byteInBuf = Math.floor(postion / 8 - 0.001);
+    if (value) {
+        buf[byteInBuf] = buf[byteInBuf] | exports._bits[bitInByte];
+    } else {
+        buf[byteInBuf] = buf[byteInBuf] ^ exports._bits[bitInByte];
+    }
+    return buf[byteInBuf];
+};
+
+exports.XOR = function (buf1, buf2) {
+    for (var i = 0, ln = buf2.length; i < ln; i++) {
+        buf1[i] = buf1[i] ^ buf2[i];
+    }
+    return buf1;
+};
+
+exports.AND = function (buf1, buf2) {
+    for (var i = 0, ln = buf2.length; i < ln; i++) {
+        buf1[i] = buf1[i] & buf2[i];
+    }
+    return buf1;
+};
+
+exports.OR = function (buf1, buf2) {
+    for (var i = 0, ln = buf2.length; i < ln; i++) {
+        buf1[i] = buf1[i] | buf2[i];
+    }
+    return buf1;
+};
+
+exports.NOT = function (buf) {
+    for (var i = 0, ln = buf.length; i < ln; i++) {
+        buf[i] = ~ buf[i];
+    }
+    return buf;
+};
+
+exports.EQUAL = function (buf1, buf2) {
+    if (buf1.length !== buf2.length) return false;
+    var equal = true;
+    var length = buf1.length;
+    var index = 0;
+    while (equal && index < length) {
+        if (buf1[index] === buf2[index]) {
+            index++;
+        } else {
+            equal = false;
+        }
+    }
+    return equal;
+};
+
+exports.leftShift = function (buf, offset) {
+    if (buf.length === 1) return new Buffer([buf[0] << offset]);
+    var byteOffset = offset % 8;
+    var bufferOffset = (offset - byteOffset) / 8;
+    var newbuf = new Buffer(buf.length);
+    var lastByteChange = 0;
+    for (var i = 0, ln = buf.length - bufferOffset + 1; i < ln; i++) {
+        newbuf[i] = ((buf[i + bufferOffset] << byteOffset) | (buf[i + bufferOffset + 1] >>> (8 - byteOffset)));
+        lastByteChange = i;
+    }
+    if (byteOffset === 0) byteOffset = 8;
+    newbuf[lastByteChange + 1] = buf[lastByteChange + 1] >>> byteOffset << byteOffset;
+    if (offset > 8) for (i = lastByteChange + 1, ln = newbuf.length; i < ln; i++) { newbuf[i] = 0x00; }
+    return newbuf;
+};
+
+exports.rightShift = function (buf, offset) {
+    if (buf.length === 1) return new Buffer([buf[0] >>> offset]);
+    var byteOffset = offset % 8;
+    var bufferOffset = (offset - byteOffset) / 8;
+    var newbuf = new Buffer(buf.length);
+    var lastByteChange = buf.length;
+
+    for (var i = buf.length - 1, ln = bufferOffset; i > ln; i--) {
+        newbuf[i] = ((buf[i - bufferOffset] >>>  byteOffset) | (buf[i - bufferOffset - 1] << (8 - byteOffset)));
+        lastByteChange = i;
+    }
+    newbuf[lastByteChange - 1] = buf[lastByteChange - bufferOffset - 1] >>> byteOffset;
+    if (bufferOffset > 0) for (i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0x00; }
+    return newbuf;
+};
+
+exports.signedRightShift = function (buf, offset) {
+    if (buf.length === 1) return  new Buffer([((buf[0] >> offset) ^ (-128 >> (offset - 1)))]);
+    if (!exports.getBit(buf, 1)) return exports.rightShift(buf, offset);
+    var byteOffset = offset % 8;
+    var bufferOffset = (offset - byteOffset) / 8;
+    var newbuf = new Buffer(buf.length);
+    var lastByteChange = buf.length;
+
+    for (var i = buf.length - 1, ln = bufferOffset; i > ln; i--) {
+        newbuf[i] = ((buf[i - bufferOffset] >>>  byteOffset) | (buf[i - bufferOffset - 1] << (8 - byteOffset)));
+        lastByteChange = i;
+    }
+    newbuf[lastByteChange - 1] = byteOffset === 0 ? buf[lastByteChange - bufferOffset - 1] : ((buf[lastByteChange - bufferOffset - 1] >> byteOffset) ^ (-128 >> (byteOffset - 1)));
+    if (bufferOffset > 0) for (i = lastByteChange - 2; i >= 0; i--) { newbuf[i] = 0xFF; }
+    return newbuf;
+};
+
 exports.readString = function (buf, start, end) {
     var pos = start || 0,
         last = end || buf.length,
