@@ -275,7 +275,6 @@ describe('butils', function () {
             var buf = new Buffer([0xAB, 0xCD]);
             var newbuf = butils.signedRightShift(buf, 4);
             
-            console.log(newbuf);
             expect(butils.EQUAL(newbuf, new Buffer([0xFA, 0xBC]))).to.equal(true);
             done();
         });
